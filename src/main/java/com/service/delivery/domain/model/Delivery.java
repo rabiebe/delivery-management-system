@@ -17,11 +17,14 @@ public class Delivery {
 
     private static final int MAX_MONTHS_IN_FUTURE = 3;
 
-    public Delivery(UUID id, DeliveryMode mode, ZonedDateTime deliveryDate) {
+
+
+    public Delivery(UUID id, DeliveryMode mode, ZonedDateTime deliveryDate, boolean validateDate) {
         if (mode == null) {
             throw new InvalidDeliveryModeException("Delivery mode cannot be null.");
         }
-        if (!isValidDeliveryDate(deliveryDate)) {
+
+        if (validateDate && !isValidDeliveryDate(deliveryDate)) {
             throw new InvalidDeliveryDateException(
                     "Delivery date must be in the future and within " + MAX_MONTHS_IN_FUTURE + " months.");
         }
@@ -30,7 +33,7 @@ public class Delivery {
         this.deliveryDate = deliveryDate;
     }
 
-    private static boolean isValidDeliveryDate(ZonedDateTime deliveryDate) {
+    private boolean isValidDeliveryDate(ZonedDateTime deliveryDate) {
         if (deliveryDate == null) {
             return false;
         }
@@ -44,7 +47,7 @@ public class Delivery {
             throw new InvalidDeliveryDateException(
                     "New delivery date must be in the future and within " + MAX_MONTHS_IN_FUTURE + " months.");
         }
-        return new Delivery(this.id, this.mode, newDate);
+        return new Delivery(this.id, this.mode, newDate, true);
     }
 }
 

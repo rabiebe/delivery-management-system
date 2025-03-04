@@ -22,17 +22,18 @@ public class DeliveryRepositoryImpl implements DeliveryRepository {
     @Override
     public Delivery save(Delivery delivery) {
         DeliveryEntity entity = infrastructureDeliveryMapper.toEntity(delivery);
-        return infrastructureDeliveryMapper.toDomain(deliveryJpaRepository.save(entity));
+        return infrastructureDeliveryMapper.toDomain(deliveryJpaRepository.save(entity), true);
     }
 
     @Override
     public Optional<Delivery> findById(UUID id) {
-        return deliveryJpaRepository.findById(id).map(infrastructureDeliveryMapper::toDomain);
+        return deliveryJpaRepository.findById(id).map(entity -> infrastructureDeliveryMapper.toDomain(entity, false));
     }
 
     @Override
     public List<Delivery> findAll() {
-        return deliveryJpaRepository.findAll().stream().map(infrastructureDeliveryMapper::toDomain).toList();
+        List<DeliveryEntity> list = deliveryJpaRepository.findAll();
+        return list.stream().map(entity -> infrastructureDeliveryMapper.toDomain(entity, false)).toList();
     }
 }
 

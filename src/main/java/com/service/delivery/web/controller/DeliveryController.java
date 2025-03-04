@@ -2,7 +2,6 @@ package com.service.delivery.web.controller;
 
 import com.service.delivery.application.ports.in.DeliveryService;
 import com.service.delivery.domain.model.Delivery;
-import com.service.delivery.domain.model.DeliveryMode;
 import com.service.delivery.web.dto.request.DeliveryRequest;
 import com.service.delivery.web.dto.response.DeliveryResponse;
 import com.service.delivery.web.webmapper.WebDeliveryMapper;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,14 +23,13 @@ public class DeliveryController {
 
     @PostMapping
     public ResponseEntity<DeliveryResponse> createDelivery(@Valid @RequestBody DeliveryRequest request) {
-        Delivery delivery = deliveryMapper.toDomain(request);
+        Delivery delivery = deliveryMapper.toDomain(request, true);
         Delivery createdDelivery = deliveryService.createDelivery(delivery);
         return ResponseEntity.ok(deliveryMapper.toResponse(createdDelivery));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DeliveryResponse> getDeliveryById(@PathVariable UUID id) {
-
         return deliveryService.getDeliveryById(id)
                 .map(deliveryMapper::toResponse)
                 .map(ResponseEntity::ok)

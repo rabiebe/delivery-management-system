@@ -14,7 +14,7 @@ import java.time.ZonedDateTime;
 public interface WebDeliveryMapper {
     WebDeliveryMapper INSTANCE = Mappers.getMapper(WebDeliveryMapper.class);
 
-    default Delivery toDomain(DeliveryRequest request) {
+    default Delivery toDomain(DeliveryRequest request, boolean validateDate) {
         if (request == null) {
             return null;
         }
@@ -27,7 +27,7 @@ public interface WebDeliveryMapper {
         }
 
         ZonedDateTime deliveryDate = ZonedDateTime.parse(request.deliveryDate());
-        return new Delivery(null, mode, deliveryDate);
+        return new Delivery(null, mode, deliveryDate, validateDate);
     }
 
     default DeliveryResponse toResponse(Delivery delivery){

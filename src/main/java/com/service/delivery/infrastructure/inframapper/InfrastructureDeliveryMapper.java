@@ -13,14 +13,15 @@ import java.time.ZonedDateTime;
 public interface InfrastructureDeliveryMapper {
     InfrastructureDeliveryMapper INSTANCE = Mappers.getMapper(InfrastructureDeliveryMapper.class);
 
-    default Delivery toDomain(DeliveryEntity entity){
+    default Delivery toDomain(DeliveryEntity entity, boolean validDate){
         if(entity == null) return null;
         // Convert Instant to ZonedDateTime (using UTC as the default time zone)
         ZonedDateTime deliveryDate = entity.getDeliveryDate() != null
                 ? entity.getDeliveryDate().atZone(ZoneOffset.UTC)
                 : null;
-        return new Delivery(null, entity.getMode(), deliveryDate);
+        return new Delivery(null, entity.getMode(), deliveryDate, validDate);
     }
+
 
     default DeliveryEntity toEntity(Delivery delivery){
         if(delivery == null) return null;

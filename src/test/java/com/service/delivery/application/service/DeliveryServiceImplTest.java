@@ -32,7 +32,7 @@ public class DeliveryServiceImplTest {
     @Test
     void testCreateDelivery_ShouldReturnSavedDelivery() {
         // Arrange
-        Delivery delivery = createValidDelivery();
+        Delivery delivery = createValidDelivery(true);
         when(deliveryRepository.save(delivery)).thenReturn(delivery);
 
         // Act
@@ -54,14 +54,14 @@ public class DeliveryServiceImplTest {
 
     @Test
     void testCreateDelivery_ShouldThrowInvalidDeliveryException_WhenModeIsNull() {
-        Delivery delivery = new Delivery(UUID.randomUUID(), null, ZonedDateTime.now());
+        Delivery delivery = new Delivery(UUID.randomUUID(), null, ZonedDateTime.now(), true);
         assertThrows(InvalidDeliveryException.class, () -> deliveryService.createDelivery(delivery));
         verify(deliveryRepository, times(0)).save(delivery);
     }
 
     @Test
     void testCreateDelivery_ShouldThrowInvalidDeliveryException_WhenDateIsNull() {
-        Delivery delivery = new Delivery(UUID.randomUUID(), DeliveryMode.DELIVERY, null);
+        Delivery delivery = new Delivery(UUID.randomUUID(), DeliveryMode.DELIVERY, null, true);
         assertThrows(InvalidDeliveryException.class, () -> deliveryService.createDelivery(delivery));
         verify(deliveryRepository, times(0)).save(delivery);
     }
@@ -70,7 +70,7 @@ public class DeliveryServiceImplTest {
     void testGetDeliveryById_ShouldReturnDelivery_WhenDeliveryExists() {
         // Arrange
         UUID id = UUID.randomUUID();
-        Delivery delivery = createValidDelivery();
+        Delivery delivery = createValidDelivery(false);
         when(deliveryRepository.findById(id)).thenReturn(Optional.of(delivery));
 
         // Act
@@ -104,7 +104,7 @@ public class DeliveryServiceImplTest {
     @Test
     void testGetAllDeliveries_ShouldReturnAllDeliveries(){
         //Arrange
-        Delivery delivery = createValidDelivery();
+        Delivery delivery = createValidDelivery(false);
         List<Delivery> deliveries = List.of(delivery);
 
         when(deliveryRepository.findAll()).thenReturn(deliveries);
@@ -120,7 +120,7 @@ public class DeliveryServiceImplTest {
         verify(deliveryRepository, times(1)).findAll();
     }
 
-    private Delivery createValidDelivery() {
-        return new Delivery(UUID.randomUUID(), DeliveryMode.DELIVERY, ZonedDateTime.now());
+    private Delivery createValidDelivery(boolean validDate) {
+        return new Delivery(UUID.randomUUID(), DeliveryMode.DELIVERY, ZonedDateTime.now(), validDate);
     }
 }
