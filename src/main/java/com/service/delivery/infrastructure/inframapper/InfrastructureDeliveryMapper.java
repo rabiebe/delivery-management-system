@@ -19,7 +19,7 @@ public interface InfrastructureDeliveryMapper {
         ZonedDateTime deliveryDate = entity.getDeliveryDate() != null
                 ? entity.getDeliveryDate().atZone(ZoneOffset.UTC)
                 : null;
-        return new Delivery(null, entity.getMode(), deliveryDate, validDate);
+        return new Delivery(entity.getId(), entity.getMode(), deliveryDate, validDate);
     }
 
 
